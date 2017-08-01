@@ -2,16 +2,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>pl.poleng</groupId>
-	<artifactId>translation-management</artifactId> 
+	<artifactId>translation-management</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>TranslationManagement</name>
+	<name>Translation Management</name>
 
 	<properties>
 		<springframework.version>4.3.9.RELEASE</springframework.version>
 		<springsecurity.version>4.2.3.RELEASE</springsecurity.version>
 		<hibernate.version>4.3.11.Final</hibernate.version>
 		<mysql.connector.version>5.1.31</mysql.connector.version>
+		<jackson.version>2.7.5</jackson.version>
 	</properties>
 
 	<dependencies>
