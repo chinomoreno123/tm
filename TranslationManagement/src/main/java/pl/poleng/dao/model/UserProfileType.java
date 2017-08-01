@@ -2,6 +2,11 @@ package pl.poleng.dao.model;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @author Dariusz Pudlik
+ *
+ */
 public enum UserProfileType implements Serializable {
 	USER("USER"), DBA("DBA"), ADMIN("ADMIN");
 

@@ -14,6 +14,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotEmpty;
 
+/**
+ * 
+ * @author Dariusz Pudlik
+ *
+ */
 @Entity
 @Table(name = "users")
 public class User implements Serializable {

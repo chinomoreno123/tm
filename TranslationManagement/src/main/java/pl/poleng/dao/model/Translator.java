@@ -23,7 +23,6 @@ public class Translator {
 	private String lastName;
 
 	@NotEmpty
-	@Column
 	private String email;
 
 	private String phone1;
