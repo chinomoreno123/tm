@@ -8,4 +8,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @PropertySource({ "classpath:db.properties" })
 public class HibernateConfiguration {
-}
+} 
