@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pl.poleng.dao.model.User;
 import pl.poleng.dao.model.UserProfile;
 import pl.poleng.service.UserService;
 
@@ -25,23 +26,24 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		pl.poleng.dao.model.User user = this.userService.findByUsername(username);
+		User user = this.userService.findByUsername(username);
 		logger.info("User : {}", user);
 		if (user == null) {
 			logger.info("User not found");
 			throw new UsernameNotFoundException("Username not found");
 		}
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true,
-				true, true, true, getGrantedAuthorities(user));
+		/*return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true,
+				true, true, true, getGrantedAuthorities(user));*/
+		return new MyUserPrincipal(user);
 	}
 
-	private List<GrantedAuthority> getGrantedAuthorities(pl.poleng.dao.model.User user) {
-		List<GrantedAuthority> authorities = new ArrayList();
-		for (UserProfile userProfile : user.getUserProfiles()) {
-			logger.info("UserProfile : {}", userProfile);
-			authorities.add(new SimpleGrantedAuthority("ROLE_" + userProfile.getType()));
-		}
-		logger.info("authorities : {}", authorities);
-		return authorities;
-	}
+//	private List<GrantedAuthority> getGrantedAuthorities(User user) {
+//		List<GrantedAuthority> authorities = new ArrayList();
+//		for (UserProfile userProfile : user.getUserProfiles()) {
+//			logger.info("UserProfile : {}", userProfile);
+//			authorities.add(new SimpleGrantedAuthority("ROLE_" + userProfile.getType()));
+//		}
+//		logger.info("authorities : {}", authorities);
+//		return authorities;
+//	}
 }

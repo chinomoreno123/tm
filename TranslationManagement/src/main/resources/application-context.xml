@@ -8,7 +8,7 @@
 	    http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
 
 	<context:component-scan base-package="pl.poleng" />
-	<mvc:annotation-driven />
+	<mvc:annotation-driven conversion-service="conversionService" />
 
 	<!-- Configure to plugin JSON as request and response in method handler -->
 	<bean
@@ -76,5 +76,15 @@
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
 		</property>
 	</bean>
+	
+	
+	<bean id="conversionService"
+        class="org.springframework.context.support.ConversionServiceFactoryBean">
+    <property name="converters">
+        <set>
+            <bean class="pl.poleng.converter.RoleToUserProfileConverter"/>
+        </set>
+    </property>
+</bean>
 
 </beans>

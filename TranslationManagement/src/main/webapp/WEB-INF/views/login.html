@@ -4,16 +4,22 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Translation Management | Log in</title>
+
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
 <!-- Bootstrap 3.3.6 -->
 <link href="webjars/adminlte/2.3.11/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
 <!-- Ionicons -->	
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
 <!-- Theme style -->
 <link rel="stylesheet" href="webjars/adminlte/2.3.11/dist/css/AdminLTE.min.css">
+
 <!-- iCheck -->
 <link rel="stylesheet" href="webjars/adminlte/2.3.11/plugins/iCheck/square/blue.css">
 
@@ -35,15 +41,17 @@
 		<div class="login-box-body">
 			<p class="login-box-msg">Sign in to start your session</p>
 			<p class="login-box-msg">
+<!-- 				<span class="help-block" th:if="${param.error}" th:text="#{login.error}">Help block with error</span> -->
 				<font color="red" th:if="${param.error}" th:text="#{login.error}"> </font>
+				<font color="green" th:if="${param.logout}" th:text="#{login.logout}"> </font>
 			</p>
 
 			<form role="form" action="/login" th:action="@{/login}" name="f" method="POST">
-				<div class="form-group has-feedback">
+				<div class="form-group has-feedback" th:classappend="${param.error} ? has-error : none">
 					<input type="text" class="form-control" placeholder="Name" id="user" name="username"> <span
 						class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
-				<div class="form-group has-feedback">
+				<div class="form-group has-feedback" th:classappend="${param.error} ? has-error : none">
 					<input type="password" class="form-control" placeholder="Password" id="password" name="password"> <span
 						class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>

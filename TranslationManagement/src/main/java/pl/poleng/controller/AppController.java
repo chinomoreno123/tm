@@ -16,10 +16,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import pl.poleng.dao.model.User;
 import pl.poleng.dao.model.UserProfile;
+import pl.poleng.security.MyUserPrincipal;
 import pl.poleng.service.UserProfileService;
 import pl.poleng.service.UserService;
 
@@ -36,8 +38,8 @@ public class AppController {
 
 	@Autowired
 	MessageSource messageSource;
-
-	@RequestMapping(value = { "/", "/list" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+ 
+	@RequestMapping(value = { "/", "/list" }, method = { RequestMethod.GET })
 	public String listUsers(ModelMap model) {
 		List<User> users = this.userService.findAllUsers();
 		model.addAttribute("users", users);
@@ -46,25 +48,25 @@ public class AppController {
 		return "userslist";
 	}
 
-	@RequestMapping(value = { "/newuser" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	@RequestMapping(value = { "/newuser" }, method = { RequestMethod.GET })
 	public String newUser(ModelMap model) {
 		User user = new User();
 		model.addAttribute("user", user);
 		model.addAttribute("edit", Boolean.valueOf(false));
 		model.addAttribute("loggedinuser", getPrincipal());
-		return "registration";
+		return "newuser";
 	}
 
-	@RequestMapping(value = { "/newuser" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
+	@RequestMapping(value = { "/newuser" }, method = { RequestMethod.POST })
 	public String saveUser(@Valid User user, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
-			return "registration";
+			return "newuser";
 		}
 		if (!this.userService.isUsernameUnique(user.getId(), user.getUsername())) {
 			FieldError ssoError = new FieldError("user", "username", this.messageSource
 					.getMessage("non.unique.username", new String[] { user.getUsername() }, Locale.getDefault()));
 			result.addError(ssoError);
-			return "registration";
+			return "newuser";
 		}
 		this.userService.saveUser(user);
 
@@ -72,7 +74,7 @@ public class AppController {
 				"User " + user.getFirstName() + " " + user.getLastName() + " registered successfully");
 		model.addAttribute("loggedinuser", getPrincipal());
 
-		return "registrationsuccess";
+		return "redirect:/admin/user/list";
 	}
 
 	@RequestMapping(value = { "/edit-user-{username}" }, method = {
@@ -119,13 +121,13 @@ public class AppController {
 	}
 
 	private String getPrincipal() {
-		String userName = null;
+		String fullName = null;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if ((principal instanceof UserDetails)) {
-			userName = ((UserDetails) principal).getUsername();
+		if ((principal instanceof MyUserPrincipal)) {
+			fullName = ((MyUserPrincipal) principal).getFirstName() + " " +  ((MyUserPrincipal) principal).getLastName(); 
 		} else {
-			userName = principal.toString();
+			fullName = principal.toString();
 		}
-		return userName;
+		return fullName;
 	}
 }

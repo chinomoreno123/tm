@@ -12,6 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -31,22 +35,26 @@ public class User implements Serializable {
 
 	@NotEmpty
 	@Column(unique = true, nullable = false)
+	@Size(min=2, max=30)
 	private String username;
 
 	@NotEmpty
-	@Column(nullable = false)
+	@Column(nullable = false)	
 	private String password;
 
 	@NotEmpty
 	@Column(nullable = false)
+	@Size(min=2, max=30)
 	private String firstName;
 
 	@NotEmpty
 	@Column(nullable = false)
+	@Size(min=2, max=30)
 	private String lastName;
 
 	@NotEmpty
 	@Column(nullable = false)
+	@Email
 	private String email;
 
 	@NotEmpty
