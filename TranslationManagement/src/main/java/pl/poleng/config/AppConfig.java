@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
@@ -24,16 +25,18 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import pl.poleng.converter.RoleToUserProfileConverter;
 
 @Configuration
+@EnableSpringDataWebSupport
 @EnableWebMvc
-@EnableTransactionManagement
+@EnableTransactionManagement 
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
 
-	@Autowired 
+	@Autowired
 	RoleToUserProfileConverter roleToUserProfileConverter;
 
 	public void setApplicationContext(ApplicationContext applicationContext) {
@@ -53,6 +56,7 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		SpringTemplateEngine engine = new SpringTemplateEngine();
 		engine.setEnableSpringELCompiler(true);
 		engine.setTemplateResolver(templateResolver());
+		engine.addDialect(new LayoutDialect());
 		return engine;
 	}
 
@@ -108,5 +112,13 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addConverter(roleToUserProfileConverter);
 	}
+
+//	@Override
+//	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+//		PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
+//		resolver.setFallbackPageable(new PageRequest(0, 50));
+//		argumentResolvers.add(resolver);
+//		super.addArgumentResolvers(argumentResolvers);
+//	}
 
 }

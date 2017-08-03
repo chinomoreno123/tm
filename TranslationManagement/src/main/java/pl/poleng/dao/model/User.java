@@ -12,11 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 /**
  * 
@@ -31,34 +36,44 @@ public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(DataTablesOutput.View.class)
 	private Long id;
 
 	@NotEmpty
 	@Column(unique = true, nullable = false)
 	@Size(min=2, max=30)
+	@JsonView(DataTablesOutput.View.class)
 	private String username;
 
 	@NotEmpty
 	@Column(nullable = false)	
 	private String password;
+	
+	@Transient
+	@NotEmpty
+	private String confirmPassword;
 
 	@NotEmpty
 	@Column(nullable = false)
 	@Size(min=2, max=30)
+	@JsonView(DataTablesOutput.View.class)
 	private String firstName;
 
 	@NotEmpty
 	@Column(nullable = false)
 	@Size(min=2, max=30)
+	@JsonView(DataTablesOutput.View.class)
 	private String lastName;
 
 	@NotEmpty
 	@Column(nullable = false)
 	@Email
+	@JsonView(DataTablesOutput.View.class)
 	private String email;
 
 	@NotEmpty
 	@ManyToMany(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinTable(name = "users_user_profiles", joinColumns = {
 			@javax.persistence.JoinColumn(name = "user_id") }, inverseJoinColumns = {
 					@javax.persistence.JoinColumn(name = "user_profile_id") })
@@ -159,5 +174,13 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + this.id + ", username=" + this.username + ", password=" + this.password + ", firstName="
 				+ this.firstName + ", lastName=" + this.lastName + ", email=" + this.email + "]";
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 }

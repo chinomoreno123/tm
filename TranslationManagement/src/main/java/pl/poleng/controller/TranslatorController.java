@@ -11,7 +11,7 @@ import pl.poleng.service.TranslatorService;
 
 @Controller
 public class TranslatorController {
-	
+
 	@Autowired
 	TranslatorService translatorService;
 

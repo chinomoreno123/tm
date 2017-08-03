@@ -1,0 +1,39 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head />
+<body>
+	<aside class="main-sidebar" th:fragment="mainSidebar">
+
+		<!-- sidebar: style can be found in sidebar.less -->
+		<section class="sidebar">
+
+			<!-- Sidebar Menu -->
+			<ul class="sidebar-menu">
+				<li class="header">MENU</li>
+				<!-- Optionally, you can add icons to the links -->
+				<li><a href="#" th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> <span th:text="#{menu.dashboard}">Dasboard</span></a></li>
+				<li><a href="#" th:href="@{/orders}"><i class="fa fa-files-o"></i><span th:text="#{menu.orders}">Orders</span>
+						<span class="pull-right-container"> <small class="label pull-right bg-red">3</small> <small
+							class="label pull-right bg-blue">17</small>
+					</span></a></li>
+				<li><a href="#" th:href="@{/translators}"><i class="fa fa-users"></i> <span th:text="#{menu.translators}">Translators</span></a></li>
+				<li><a href="#" th:href="@{/clients}"><i class="fa fa-users"></i> <span th:text="#{menu.clients}">Clients</span></a></li>
+				<li><a href="#" th:href="@{/reports}"><i class="fa fa-line-chart"></i> <span th:text="#{menu.reports}">Reports</span></a></li>
+				<li class="active"><a href="#" th:href="@{/admin/user/list}"><i class="fa fa-users"></i> <span
+						th:text="#{menu.users}">Users</span></a></li>
+
+				<!-- 					<li class="treeview"><a href="#"><i class="fa fa-users"></i> -->
+				<!-- 							<span>Admin</span> <span class="pull-right-container"> <i -->
+				<!-- 								class="fa fa-angle-left pull-right"></i> -->
+				<!-- 						</span> </a> -->
+				<!-- 						<ul class="treeview-menu"> -->
+				<!-- 							<li class="active"><a href="#">Users</a></li> -->
+				<!-- 							<li><a href="#">Link in level 2</a></li> -->
+				<!-- 						</ul></li> -->
+			</ul>
+			<!-- /.sidebar-menu -->
+		</section>
+		<!-- /.sidebar -->
+	</aside>
+</body>
+</html>

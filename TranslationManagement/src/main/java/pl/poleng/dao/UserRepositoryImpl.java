@@ -54,9 +54,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		return user;
 	}
 
-	public List<User> findAllUsers() {
-		return null;
-	}
+
 
 	public void deleteByUsername(String username) {
 		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();

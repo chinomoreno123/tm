@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<title>add user</title>
+</head>
+<body class="hold-transition skin-blue-light sidebar-mini">
+	<th:block layout:fragment="content" th:remove="tag">
+		<div class="wrapper">
+
+			<!-- Main Header -->
+			<header th:replace="fragments/mainHeader :: mainHeader"></header>
+
+			<!-- Left side column. contains the logo and sidebar -->
+			<aside th:replace="fragments/mainSidebar :: mainSidebar"></aside>
+
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						<span th:text="#{users.pageTitle}" th:remove="tag"></span> <small th:text="#{users.pageSubtitle}">Optional
+							description</small>
+					</h1>
+					<ol class="breadcrumb">
+						<li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+						<li class="active">Here</li>
+					</ol>
+				</section>
+
+				<!-- Main content -->
+				<section class="content">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<h3 class="box-title" th:text="${edit}? #{users.editUser} : #{users.newUser} ">Title</h3>
+								</div>
+								<!-- /.box-header -->
+								<!-- form start -->
+								<form th:object="${user}" modelAttribute="user" method="POST"> <!--  th:action="@{/admin/user/newuser}" -->
+									<div class="box-body">
+										<div class="row">
+											<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('firstName')} ? has-error : none">
+												<input type="hidden" th:field="*{id}" /> <label>First Name</label> <input class="form-control"
+													placeholder="First name" th:field="*{firstName}" type="text"> <span class="help-block"
+													th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Help block with error</span>
+											</div>
+											<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('lastName')} ? has-error : none">
+												<label>Last Name</label> <input class="form-control" th:field="*{lastName}" placeholder="last name"
+													type="text"> <span class="help-block" th:if="${#fields.hasErrors('lastName')}"
+													th:errors="*{lastName}">Help block with error</span>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('username')} ? has-error : none">
+												<label>Username</label> <input class="form-control" th:field="*{username}" placeholder="Username"
+													type="text"> <span class="help-block" th:if="${#fields.hasErrors('username')}"
+													th:errors="*{username}">Help block with error</span>
+											</div>
+											<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('email')} ? has-error : none">
+												<label>Email</label> <input class="form-control" th:field="*{email}" placeholder="Email" type="text">
+												<span class="help-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Help block with
+													error</span>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('password')} ? has-error : none">
+												<label>Password</label> <input class="form-control" th:field="*{password}" placeholder="Password"
+													type="password"> <span class="help-block" th:if="${#fields.hasErrors('password')}"
+													th:errors="*{password}">Help block with error</span>
+											</div>
+											<div class="col-sm-6  form-group" th:classappend="${#fields.hasErrors('confirmPassword')} ? has-error : none">
+												<label>Retype password</label> <input class="form-control" th:field="*{confirmPassword}"
+													placeholder="Confirm password" type="password"> <span class="help-block"
+													th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Help block with error</span>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('userProfiles')} ? has-error : none">
+												<label>Roles</label> <select th:field="*{userProfiles}" multiple="multiple" class="form-control">
+													<option th:each="role : ${roles}" th:field="*{userProfiles}" th:text="${role.type}" th:value="${{role.id}}">AA
+													</option>
+												</select> <span class="help-block" th:if="${#fields.hasErrors('userProfiles')}" th:errors="*{userProfiles}">Help
+													block with error</span>
+
+											</div>
+
+										</div>
+
+
+
+									</div>
+									<!-- /.box-body -->
+
+									<div class="box-footer">
+										<button type="submit" class="btn btn-primary" th:text="${edit}? #{users.editUser} : #{users.addUser}">Add user</button>
+									</div>
+								</form>
+							</div>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</section>
+				<!-- /.content -->
+			</div>
+			<!-- /.content-wrapper -->
+
+			<!-- Main Footer -->
+			<footer th:replace="fragments/mainFooter :: mainFooter"></footer>
+
+			<!-- Control Sidebar -->
+			<aside th:replace="fragments/controlSidebar :: controlSidebar"></aside>
+
+			<!-- /.control-sidebar -->
+			<!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+			<div class="control-sidebar-bg"></div>
+		</div>
+		<!-- ./wrapper -->
+
+		<!-- REQUIRED JS SCRIPTS -->
+
+		<!-- jQuery 2.2.3 -->
+		<script src="../../webjars/adminlte/2.3.11/plugins/jQuery/jquery-2.2.3.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/jQuery/jquery-2.2.3.min.js}"></script>
+		<!-- Bootstrap 3.3.6 -->
+		<script src="../../webjars/adminlte/2.3.11/bootstrap/js/bootstrap.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/bootstrap/js/bootstrap.min.js}"></script>
+		<!-- AdminLTE App -->
+		<script src="../../webjars/adminlte/2.3.11/dist/js/app.min.js" th:src="@{/webjars/adminlte/2.3.11/dist/js/app.min.js}"></script>
+
+		<!-- DataTables -->
+		<script src="../../webjars/adminlte/2.3.11/plugins/datatables/jquery.dataTables.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/datatables/jquery.dataTables.min.js}"></script>
+		<script src="../../webjars/adminlte/2.3.11/plugins/datatables/dataTables.bootstrap.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/datatables/dataTables.bootstrap.min.js}"></script>
+
+		<!-- SlimScroll -->
+		<script src="../../webjars/adminlte/2.3.11/plugins/slimScroll/jquery.slimscroll.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/slimScroll/jquery.slimscroll.min.js}"></script>
+
+		<!-- FastClick -->
+		<script src="../../webjars/adminlte/2.3.11/plugins/fastclick/fastclick.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/fastclick/fastclick.js}"></script>
+
+
+		<!-- Optionally, you can add Slimscroll and FastClick plugins.
+     Both of these plugins are recommended to enhance the
+     user experience. Slimscroll is required when using the
+     fixed layout. -->
+
+		<!-- page script -->
+		<script>
+			$(function() {
+				$('#users').DataTable({
+					"paging" : true,
+					"lengthChange" : false,
+					"searching" : false,
+					"ordering" : true,
+					"info" : true,
+					"autoWidth" : false
+				});
+			});
+		</script>
+	</th:block>
+</body>
+</html>
