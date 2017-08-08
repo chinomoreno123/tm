@@ -14,4 +14,7 @@ public abstract interface TranslatorDao extends CrudRepository<Translator, Long>
 
 	@Query("SELECT t.email FROM Translator t where t.id = :id")
 	public abstract String findEmailById(@Param("id") Long paramLong);
+	
+	@Query("SELECT t FROM Translator t where t.email = :email")
+	public abstract Translator findByEmail(@Param("email") String email);
 }

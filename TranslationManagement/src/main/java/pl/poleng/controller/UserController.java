@@ -96,18 +96,16 @@ public class UserController {
 		return "redirect:/admin/user/list";
 	}
 
-	@RequestMapping(value = { "/edit/{id}" }, method = {
-			org.springframework.web.bind.annotation.RequestMethod.GET })
+	@RequestMapping(value = { "/edit/{id}" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String editUser(@PathVariable Long id, ModelMap model) {
-		User user = this.userService.findByIdAndLoadProfiles(id);		
+		User user = this.userService.findByIdAndLoadProfiles(id);
 		model.addAttribute("user", user);
 		model.addAttribute("edit", Boolean.valueOf(true));
 		model.addAttribute("loggedinuser", getPrincipal());
 		return "newuser";
 	}
 
-	@RequestMapping(value = { "/edit/{id}" }, method = {
-			org.springframework.web.bind.annotation.RequestMethod.POST })
+	@RequestMapping(value = { "/edit/{id}" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public String updateUser(@Valid User user, BindingResult result, ModelMap model, @PathVariable Long id) {
 		model.addAttribute("edit", Boolean.valueOf(true));
 		model.addAttribute("loggedinuser", getPrincipal());

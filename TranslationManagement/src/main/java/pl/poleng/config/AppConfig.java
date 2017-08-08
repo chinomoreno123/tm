@@ -112,13 +112,4 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addConverter(roleToUserProfileConverter);
 	}
-
-//	@Override
-//	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-//		PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
-//		resolver.setFallbackPageable(new PageRequest(0, 50));
-//		argumentResolvers.add(resolver);
-//		super.addArgumentResolvers(argumentResolvers);
-//	}
-
 }

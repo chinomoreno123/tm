@@ -14,6 +14,6 @@ public class TranslatorService {
 	TranslatorDao translatorDao;
 
 	public List<Translator> getTranslators() {
-		return (List) this.translatorDao.findAll();
+		return (List<Translator>) this.translatorDao.findAll();
 	}
 }

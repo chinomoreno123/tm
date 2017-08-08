@@ -23,14 +23,11 @@ public class LoginController {
 	private LoginService loginService;
 
 	@Autowired
-	AuthenticationTrustResolver authenticationTrustResolver;
-
-	@Autowired
 	PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
 
 	@RequestMapping(value = { "/", "/login" }, method = { RequestMethod.GET })
 	public String loginPage() {
-		if (isCurrentAuthenticationAnonymous()) {
+		if (loginService.isCurrentAuthenticationAnonymous()) {
 			return "login";
 		}
 		return "redirect:/admin/user/list";
@@ -40,31 +37,15 @@ public class LoginController {
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null) {
-			this.persistentTokenBasedRememberMeServices.logout(request, response, auth);
+			persistentTokenBasedRememberMeServices.logout(request, response, auth);
 			SecurityContextHolder.getContext().setAuthentication(null);
 		}
 		return "redirect:/login?logout";
 	}
 
-	@RequestMapping(value = { "/Access_Denied" }, method = { RequestMethod.GET })
+	@RequestMapping(value = { "/accessDenied" }, method = { RequestMethod.GET })
 	public String accessDeniedPage(ModelMap model) {
-		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("loggedinuser", loginService.getPrincipal());
 		return "accessDenied";
-	}
-
-	private boolean isCurrentAuthenticationAnonymous() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return this.authenticationTrustResolver.isAnonymous(authentication);
-	}
-
-	private String getPrincipal() {
-		String userName = null;
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if ((principal instanceof UserDetails)) {
-			userName = ((UserDetails) principal).getUsername();
-		} else {
-			userName = principal.toString();
-		}
-		return userName;
 	}
 }
