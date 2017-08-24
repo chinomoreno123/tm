@@ -55,6 +55,18 @@
 			<artifactId>spring-data-jpa</artifactId>
 			<version>1.11.6.RELEASE</version>
 		</dependency>
+		
+		<!-- Spring JMS -->
+		 <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-spring</artifactId>
+            <version>5.13.3</version>
+        </dependency>
 
 		<!-- jsr303 validation -->
 		<dependency>
@@ -94,6 +106,13 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.22</version>
+		</dependency>
+		
+		<!-- ORACLE JDBC driver, need install yourself -->
+		<dependency>
+		<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0</version>
 		</dependency>
 
 		<dependency>
@@ -186,6 +205,14 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>2.2.2</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+
 
 		<!-- Servlet -->
 		<dependency>

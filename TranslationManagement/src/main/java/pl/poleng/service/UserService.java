@@ -29,6 +29,10 @@ public abstract interface UserService {
 	public abstract List<User> findAllUsers();
 
 	public abstract boolean isUsernameUnique(Long paramLong, String paramString);
+	
+	public abstract void sendUserToQueue(User user);
+	
+	public abstract void receiveFromQueue();
 
 //	public abstract Page<User> listAllByPage(Pageable pageable);
 

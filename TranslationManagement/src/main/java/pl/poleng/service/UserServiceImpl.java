@@ -2,6 +2,8 @@ package pl.poleng.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,16 +15,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.poleng.dao.UserRepository;
 import pl.poleng.dao.model.User;
+import pl.poleng.messaging.MessageReceiver;
+import pl.poleng.messaging.MessageSender;
 
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
+	static final Logger LOG = LoggerFactory.getLogger(MessageReceiver.class);
+	
 	@Autowired
 	private UserRepository dao;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	MessageSender messageSender;
+	
+	@Autowired
+	MessageReceiver messageReceiver;
 
 	public User findById(Long id) {
 		return (User) this.dao.findOne(id);
@@ -60,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	public DataTablesOutput<User> findAllUsers(DataTablesInput input) {
 		return this.dao.findAll(input);
 	}
-	
+
 	public List<User> findAllUsers() {
 		return (List<User>) this.dao.findAll();
 	}
@@ -78,8 +90,22 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByIdAndLoadProfiles(Long id) {
 		User user = (User) this.dao.findOne(id);
-		user.getUserProfiles().size();		
-		return user; 
+		user.getUserProfiles().size();
+		return user;
 	}
 
+	@Override
+	public void sendUserToQueue(User user) {
+		LOG.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		LOG.info("Application : sending order request {}", user);
+		messageSender.sendMessage(user);		
+		LOG.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+	}
+
+	@Override
+	public void receiveFromQueue() {
+		User user = (User) messageReceiver.receive();
+		
+	}
 }

@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -29,9 +33,9 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 import pl.poleng.converter.RoleToUserProfileConverter;
 
 @Configuration
-@EnableSpringDataWebSupport
+//@EnableSpringDataWebSupport
 @EnableWebMvc
-@EnableTransactionManagement 
+//@ComponentScan(basePackages = {"pl.poleng"}) 
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
@@ -83,6 +87,11 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
 	}
+	
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+	    return new PropertySourcesPlaceholderConfigurer();
+	}
 
 	@Bean
 	public CookieLocaleResolver cookieResolver() {
@@ -112,4 +121,5 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addConverter(roleToUserProfileConverter);
 	}
+
 }

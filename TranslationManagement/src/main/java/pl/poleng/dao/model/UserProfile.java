@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  * 
  * @author Dariusz Pudlik
@@ -20,7 +22,8 @@ public class UserProfile implements Serializable {
 	private static final long serialVersionUID = 6318166731662252020L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private Long id;
 
 	@Column(length = 15, unique = true, nullable = false)

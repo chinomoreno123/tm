@@ -19,16 +19,16 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import pl.poleng.dao.TranslatorDao;
 import pl.poleng.dao.model.Translator;
 
-//@WebAppConfiguration
-//@RunWith(SpringJUnit4ClassRunner.class)
-@RunWith(MockitoJUnitRunner.class)
-//@ContextConfiguration(locations = { "classpath:application-context.xml" })
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(locations = { "classpath:application-context.xml" })
 public class TranslatorServiceTest {
 	
 	@InjectMocks
 	TranslatorService translatorService;
 
-	@Mock
+	@Autowired
 	TranslatorDao translatorDao;
 	
 	@Before

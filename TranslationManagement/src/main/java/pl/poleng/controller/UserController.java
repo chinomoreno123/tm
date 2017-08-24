@@ -1,8 +1,12 @@
 package pl.poleng.controller;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
 
+import javax.jms.Message;
 import javax.validation.Valid;
 
 import org.hibernate.Hibernate;
@@ -29,7 +33,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import pl.poleng.dao.UserRepository;
 import pl.poleng.dao.model.User;
+import pl.poleng.dao.model.UserPreferences;
 import pl.poleng.dao.model.UserProfile;
+import pl.poleng.dao.model.UserProfileType;
 import pl.poleng.security.MyUserPrincipal;
 import pl.poleng.service.UserProfileService;
 import pl.poleng.service.UserService;
@@ -51,6 +57,9 @@ public class UserController {
 
 	@Autowired
 	PasswordValidator passwordValidator;
+	
+	@Autowired
+	UserPreferences preferences;
 
 	@InitBinder("user")
 	public void dataBinding(WebDataBinder binder) {
@@ -59,9 +68,30 @@ public class UserController {
 
 	@RequestMapping(value = { "/", "/list" }, method = { RequestMethod.GET })
 	public String listUsers(ModelMap model) {
+		
+		/*User user = new User();
+		user.setFirstName("Ala");
+		user.setLastName("Pulik");
+		user.setPassword("ala");
+		user.setConfirmPassword("ala");
+		user.setEmail("email@email.pl");
+		Random r = new Random();
+		user.setUsername(String.valueOf(r.nextInt(100000)));
+		Set<UserProfile> profiles = new HashSet<UserProfile>();
+		UserProfile profile = new UserProfile();
+		profile.setType(UserProfileType.ADMIN.toString());
+		profile.setId((long)2);
+		profiles.add(profile);
+		user.setUserProfiles(profiles);
+		userService.sendUserToQueue(user);*/
+		
+		
+		//userService.receiveFromQueue();
+			
+		
 		List<User> users = this.userService.findAllUsers();
 		model.addAttribute("users", users);
-		model.addAttribute("loggedinuser", getPrincipal());
+		model.addAttribute("loggedinuser", preferences.getName());
 		model.addAttribute("errorMessage", "ERROR MESSAGE");
 		return "userslist";
 	}
@@ -72,6 +102,7 @@ public class UserController {
 		model.addAttribute("user", user);
 		model.addAttribute("edit", Boolean.valueOf(false));
 		model.addAttribute("loggedinuser", getPrincipal());
+		preferences.setName("Ala ma kot");
 		return "newuser";
 	}
 

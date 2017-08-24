@@ -10,10 +10,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.poleng.dao.model.UserProfile;
 
 @Repository
+@Transactional(propagation = Propagation.MANDATORY)
 public class UserProfileRepositoryImpl implements UserProfileRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;

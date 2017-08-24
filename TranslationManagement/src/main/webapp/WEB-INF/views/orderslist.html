@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<title>orders list</title>
+</head>
+<body class="hold-transition skin-blue-light sidebar-mini">
+	<th:block layout:fragment="content" th:remove="tag">
+		<div class="wrapper">
+
+			<!-- Main Header -->
+			<header th:replace="fragments/mainHeader :: mainHeader"></header>
+
+			<!-- Left side column. contains the logo and sidebar -->
+			<aside th:replace="fragments/mainSidebar :: mainSidebar"></aside>
+
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						<span th:text="#{orders.pageTitle}" th:remove="tag"></span> <small th:text="#{orders.pageSubtitle}">Optional
+							description</small>
+					</h1>
+					<ol class="breadcrumb">
+						<li><a href="#" th:href="@{/dashboard}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+						<li class="active">Orders</li>
+					</ol>
+				</section>
+
+				<!-- Main content -->
+				<section class="content">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="box">
+								<div class="box-header">
+									<a href="#" th:href="@{/admin/order/neworder}" class="btn btn-primary btn-flat pull-left"><i class="fa fa-plus"></i> New order</a>
+								</div>
+								<!-- /.box-header -->
+								<div class="box-body">
+									<table id="orders" class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>id</th>
+												<th>declaredDocumentCount</th>
+												<th>title</th>
+												<th>client</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								<!-- /.box-body -->
+								<div class="box-footer clearfix"></div>
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</section>
+				<!-- /.content -->
+			</div>
+			<!-- /.content-wrapper -->
+
+			<!-- Main Footer -->
+			<footer th:replace="fragments/mainFooter :: mainFooter"></footer>
+
+			<!-- Control Sidebar -->
+			<aside th:replace="fragments/controlSidebar :: controlSidebar"></aside>
+
+			<!-- /.control-sidebar -->
+			<!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+			<div class="control-sidebar-bg"></div>
+		</div>
+		<!-- ./wrapper -->
+
+
+		<!-- Confirm delete modal -->
+		<div id="confirm-delete" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" th:text="#{confirmDelete.title}">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p th:text="#{confirmDelete.content}">One fine body&hellip;</p>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-default btn-flat" data-dismiss="modal">Close</a>
+						<a class="btn btn-primary btn-flat btn-ok " th:text="#{confirmDelete.delete}">Delete</a>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+
+		<!-- REQUIRED JS SCRIPTS -->
+
+		<!-- jQuery 2.2.3 -->
+		<script src="../../webjars/adminlte/2.3.11/plugins/jQuery/jquery-2.2.3.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/jQuery/jquery-2.2.3.min.js}"></script>
+		<!-- Bootstrap 3.3.6 -->
+		<script src="../../webjars/adminlte/2.3.11/bootstrap/js/bootstrap.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/bootstrap/js/bootstrap.min.js}"></script>
+		<!-- AdminLTE App -->
+		<script src="../../webjars/adminlte/2.3.11/dist/js/app.min.js" th:src="@{/webjars/adminlte/2.3.11/dist/js/app.min.js}"></script>
+
+		<!-- DataTables -->
+		<script src="../../webjars/adminlte/2.3.11/plugins/datatables/jquery.dataTables.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/datatables/jquery.dataTables.min.js}"></script>
+		<script src="../../webjars/adminlte/2.3.11/plugins/datatables/dataTables.bootstrap.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/datatables/dataTables.bootstrap.min.js}"></script>
+
+		<!-- SlimScroll -->
+		<script src="../../webjars/adminlte/2.3.11/plugins/slimScroll/jquery.slimscroll.min.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/slimScroll/jquery.slimscroll.min.js}"></script>
+
+		<!-- FastClick -->
+		<script src="../../webjars/adminlte/2.3.11/plugins/fastclick/fastclick.js"
+			th:src="@{/webjars/adminlte/2.3.11/plugins/fastclick/fastclick.js}"></script>
+
+
+		<script src="/resources/js/jquery.spring-friendly.js" th:src="@{/resources/js/jquery.spring-friendly.js}"></script>
+
+		<!-- Optionally, you can add Slimscroll and FastClick plugins.
+     Both of these plugins are recommended to enhance the
+     user experience. Slimscroll is required when using the
+     fixed layout. -->
+
+		<!-- page script -->
+		<script>
+			$(function() {
+				$('#orders')
+						.DataTable(
+								{
+									"ajax" : "/translation-management/order/listData",
+									"autoWidth" : false,
+									"processing" : false,
+									"searching" : false,
+									"serverSide" : true,
+									"paging" : true,
+									"lengthChange" : false,
+									"pageLength" : 8,
+									"ordering" : true,
+									"info" : true,
+									"autoWidth" : false,
+									"language" : {
+										"loadingRecords" : "Please wait - loading..."
+									},
+									"columns" : [
+											{
+												"data" : "id",
+												"width" : "3%"
+											},
+											{
+												"data" : "declaredDocumentCount"
+											},
+											{
+												"data" : "title"
+											},
+											{
+												"data" : "client.firstName"
+											} ]
+								});
+
+				$('#confirm-delete').on('show.bs.modal',
+						function(e) {
+							$(this).find('.btn-ok').attr('href',
+									$(e.relatedTarget).data('href'));
+						});
+
+			});
+		</script>
+	</th:block>
+</body>
+</html>

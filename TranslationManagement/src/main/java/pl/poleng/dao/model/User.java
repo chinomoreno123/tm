@@ -3,6 +3,7 @@ package pl.poleng.dao.model;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,11 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -35,7 +37,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 4214792490951575932L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView(DataTablesOutput.View.class)
 	private Long id;
 
@@ -73,11 +75,11 @@ public class User implements Serializable {
 
 	@NotEmpty
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JsonIgnore
+	//@JsonIgnore
 	@JoinTable(name = "users_user_profiles", joinColumns = {
 			@javax.persistence.JoinColumn(name = "user_id") }, inverseJoinColumns = {
 					@javax.persistence.JoinColumn(name = "user_profile_id") })
-	private Set<UserProfile> userProfiles = new HashSet();
+	private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
 
 	public Long getId() {
 		return this.id;

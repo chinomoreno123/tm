@@ -13,10 +13,13 @@ import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.poleng.dao.model.User;
 
 @Repository
+@Transactional(propagation = Propagation.MANDATORY)
 public class UserRepositoryImpl implements UserRepositoryCustom {
 	static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 	@PersistenceContext
