@@ -1,6 +1,7 @@
 package pl.poleng.dao.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,19 +11,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 
 /**
@@ -32,7 +32,10 @@ import com.fasterxml.jackson.annotation.JsonView;
  */
 @Entity
 @Table(name = "users")
+//@NamedEntityGraph(name = User.USER_PROFILES_GRAPH, attributeNodes = @NamedAttributeNode("userProfiles"))
 public class User implements Serializable {
+	
+	//public static final String USER_PROFILES_GRAPH = "User.userProfiles";
 
 	private static final long serialVersionUID = 4214792490951575932L;
 
@@ -72,13 +75,16 @@ public class User implements Serializable {
 	@Email
 	@JsonView(DataTablesOutput.View.class)
 	private String email;
+	
+	@JsonView(DataTablesOutput.View.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+	private Date created;
 
 	@NotEmpty
-	@ManyToMany(fetch = FetchType.LAZY)
-	//@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY)	
 	@JoinTable(name = "users_user_profiles", joinColumns = {
-			@javax.persistence.JoinColumn(name = "user_id") }, inverseJoinColumns = {
-					@javax.persistence.JoinColumn(name = "user_profile_id") })
+			@JoinColumn(name = "user_id") }, inverseJoinColumns = {
+					@JoinColumn(name = "user_profile_id") })
 	private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
 
 	public Long getId() {
@@ -137,45 +143,86 @@ public class User implements Serializable {
 		this.userProfiles = userProfiles;
 	}
 
+	
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", confirmPassword="
+				+ confirmPassword + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", created=" + created + ", userProfiles=" + userProfiles + "]";
+	}
+
+	@Override
 	public int hashCode() {
-		int prime = 31;
+		final int prime = 31;
 		int result = 1;
-		result = 31 * result + (this.id == null ? 0 : this.id.hashCode());
-		result = 31 * result + (this.username == null ? 0 : this.username.hashCode());
+		result = prime * result + ((confirmPassword == null) ? 0 : confirmPassword.hashCode());
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((userProfiles == null) ? 0 : userProfiles.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (!(obj instanceof User)) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		User other = (User) obj;
-		if (this.id == null) {
-			if (other.id != null) {
+		if (confirmPassword == null) {
+			if (other.confirmPassword != null)
 				return false;
-			}
-		} else if (!this.id.equals(other.id)) {
+		} else if (!confirmPassword.equals(other.confirmPassword))
 			return false;
-		}
-		if (this.username == null) {
-			if (other.username != null) {
+		if (created == null) {
+			if (other.created != null)
 				return false;
-			}
-		} else if (!this.username.equals(other.username)) {
+		} else if (!created.equals(other.created))
 			return false;
-		}
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (userProfiles == null) {
+			if (other.userProfiles != null)
+				return false;
+		} else if (!userProfiles.equals(other.userProfiles))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
 		return true;
-	}
-
-	public String toString() {
-		return "User [id=" + this.id + ", username=" + this.username + ", password=" + this.password + ", firstName="
-				+ this.firstName + ", lastName=" + this.lastName + ", email=" + this.email + "]";
 	}
 
 	public String getConfirmPassword() {

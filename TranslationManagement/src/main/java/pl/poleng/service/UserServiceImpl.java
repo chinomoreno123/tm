@@ -1,6 +1,7 @@
 package pl.poleng.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.poleng.dao.UserRepository;
 import pl.poleng.dao.model.User;
+import pl.poleng.dao.model.UserProfile;
 import pl.poleng.messaging.MessageReceiver;
 import pl.poleng.messaging.MessageSender;
 
-@Service("userService")
+@Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
 	static final Logger LOG = LoggerFactory.getLogger(MessageReceiver.class);
 	
 	@Autowired
-	private UserRepository dao;
+	private UserRepository userDao;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -37,21 +39,30 @@ public class UserServiceImpl implements UserService {
 	MessageReceiver messageReceiver;
 
 	public User findById(Long id) {
-		return (User) this.dao.findOne(id);
+		User user = this.userDao.findOne(id);
+		Set<UserProfile> profiles = user.getUserProfiles();
+		return user; 
 	}
-
+	
+	public List<User> findTest(Long id) {
+		List<User> users = (List<User>)this.userDao.findAll();
+		User u = users.get(0);
+		//Set<UserProfile> profiles = user.getUserProfiles();
+		return users;
+	}
+	
 	public User findByUsername(String username) {
-		User user = this.dao.findByUsername(username);
+		User user = this.userDao.findByUsername(username);
 		return user;
 	}
 
 	public void saveUser(User user) {
 		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-		this.dao.save(user);
+		this.userDao.save(user);
 	}
 
 	public void updateUser(User user) {
-		User entity = (User) this.dao.findOne(user.getId());
+		User entity = (User) this.userDao.findOne(user.getId());
 		if (entity != null) {
 			entity.setUsername(user.getUsername());
 			if (!user.getPassword().equals(entity.getPassword())) {
@@ -66,15 +77,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public void deleteUserByUsername(String username) {
-		this.dao.deleteByUsername(username);
+		this.userDao.deleteByUsername(username);
 	}
 
 	public DataTablesOutput<User> findAllUsers(DataTablesInput input) {
-		return this.dao.findAll(input);
+		return this.userDao.findAll(input);
 	}
 
 	public List<User> findAllUsers() {
-		return (List<User>) this.dao.findAll();
+		return (List<User>) this.userDao.findAll();
 	}
 
 	public boolean isUsernameUnique(Long id, String username) {
@@ -84,14 +95,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteUserById(Long id) {
-		this.dao.delete(id);
+		this.userDao.delete(id);
 	}
 
 	@Override
 	public User findByIdAndLoadProfiles(Long id) {
-		User user = (User) this.dao.findOne(id);
-		user.getUserProfiles().size();
-		return user;
+		return this.userDao.findByIdAndWihProfiles(id);
 	}
 
 	@Override
@@ -104,8 +113,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void receiveFromQueue() {
-		User user = (User) messageReceiver.receive();
+	public User receiveFromQueue() {
+		return (User) messageReceiver.receive();
 		
 	}
 }

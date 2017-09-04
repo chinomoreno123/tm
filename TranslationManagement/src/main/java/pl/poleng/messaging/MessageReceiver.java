@@ -72,6 +72,7 @@ public class MessageReceiver implements MessageListener{
     	User user = null;
 		try {
 			user = (User) messageConverter.fromMessage(msg);
+			//throw new RuntimeException("Message could not be consumed. Roll back transaction");  
 		} catch (MessageConversionException | JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -6,15 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -33,9 +28,7 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 import pl.poleng.converter.RoleToUserProfileConverter;
 
 @Configuration
-//@EnableSpringDataWebSupport
-@EnableWebMvc
-//@ComponentScan(basePackages = {"pl.poleng"}) 
+@EnableWebMvc 
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
@@ -45,8 +38,8 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
-	}
-
+	}		
+	
 	@Bean
 	public ViewResolver viewResolver() {
 		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
@@ -55,7 +48,7 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		return resolver;
 	}
 
-	@Bean(name = { "templateEngine" })
+	@Bean
 	public TemplateEngine templateEngine() {
 		SpringTemplateEngine engine = new SpringTemplateEngine();
 		engine.setEnableSpringELCompiler(true);
@@ -73,6 +66,7 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		return resolver;
 	}
 
+	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler(new String[] { "/resources/**" })
 				.addResourceLocations(new String[] { "/resources/" });
@@ -87,10 +81,10 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
 	}
-	
+
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
-	    return new PropertySourcesPlaceholderConfigurer();
+		return new PropertySourcesPlaceholderConfigurer();
 	}
 
 	@Bean
@@ -115,11 +109,11 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 	/**
 	 * Configure Converter to be used. In our example, we need a converter to
-	 * convert string values[Roles] to UserProfiles in newUser.jsp
+	 * convert string values[Roles] to UserProfiles
 	 */
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addConverter(roleToUserProfileConverter);
 	}
-
+	
 }

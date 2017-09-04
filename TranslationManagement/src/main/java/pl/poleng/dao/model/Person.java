@@ -3,6 +3,7 @@ package pl.poleng.dao.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -14,6 +15,9 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -25,13 +29,17 @@ public abstract class Person implements Serializable {
 	private static final long serialVersionUID = -2117042694434892256L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(DataTablesOutput.View.class)
 	private Long id;	
 
+	@JsonView(DataTablesOutput.View.class)
 	private String firstName;
+	@JsonView(DataTablesOutput.View.class)
 	private String secondName;
+	@JsonView(DataTablesOutput.View.class)
 	private String lastName;
+	@JsonView(DataTablesOutput.View.class)
 	private String email;
 	private String taxResidency;
 	private String telphone;
@@ -48,15 +56,12 @@ public abstract class Person implements Serializable {
 	private Address registeredAddress;
 	
 	@Embedded
-	@AttributeOverrides({ @javax.persistence.AttributeOverride(name="street", column=@Column(name="ca_street")), @javax.persistence.AttributeOverride(name="streetNo", column=@Column(name="ca_streetNo")), @javax.persistence.AttributeOverride(name="apartmentNo", column=@Column(name="ca_apartmentNo")), @javax.persistence.AttributeOverride(name="postcode", column=@Column(name="ca_postcode")), @javax.persistence.AttributeOverride(name="country", column=@Column(name="ca_country")), @javax.persistence.AttributeOverride(name="description", column=@Column(name="ca_description")), @javax.persistence.AttributeOverride(name="town", column=@Column(name="ca_town"))})	  
+	@AttributeOverrides({ @AttributeOverride(name="street", column=@Column(name="ca_street")), @AttributeOverride(name="streetNo", column=@Column(name="ca_streetNo")), @AttributeOverride(name="apartmentNo", column=@Column(name="ca_apartmentNo")), @AttributeOverride(name="postcode", column=@Column(name="ca_postcode")), @AttributeOverride(name="country", column=@Column(name="ca_country")), @AttributeOverride(name="description", column=@Column(name="ca_description")), @AttributeOverride(name="town", column=@Column(name="ca_town"))})	  
 	private Address contactAddress;
 	
 	private String bankAccount;
 	private String bankName;
 	private String nip;
-	// private Set<Employment> employers;
-	// private String inlandRevenue;
-
 	
 	@Override
 	public boolean equals(Object obj) {

@@ -26,8 +26,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 public class Client {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView(DataTablesOutput.View.class)
 	private Long id;
 

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import pl.poleng.dao.model.User;
 
 public abstract interface UserService {
+	
 	public abstract User findById(Long paramLong);
 	
 	public abstract User findByIdAndLoadProfiles(Long paramLong);
@@ -32,8 +33,8 @@ public abstract interface UserService {
 	
 	public abstract void sendUserToQueue(User user);
 	
-	public abstract void receiveFromQueue();
-
-//	public abstract Page<User> listAllByPage(Pageable pageable);
+	public abstract User receiveFromQueue();
+	
+	public abstract List<User> findTest(Long paramLong);
 
 }

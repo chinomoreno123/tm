@@ -1,5 +1,6 @@
 package pl.poleng.dao;
 
+import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,7 @@ import pl.poleng.dao.model.Translator;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public abstract interface TranslatorDao extends CrudRepository<Translator, Long> {
+public abstract interface TranslatorDao extends DataTablesRepository<Translator, Long> {
 	
 	@Query("SELECT t.firstName FROM Translator t where t.id = :id")
 	public abstract String findFirstNameById(@Param("id") Long paramLong);

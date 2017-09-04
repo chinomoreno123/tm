@@ -7,9 +7,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -35,13 +35,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 	public User findByUsername(String username) {
 		logger.info("USERNAME : {}", username);
-
-		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+		
+		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();		
 
 		CriteriaQuery<User> criteriaQuery = cb.createQuery(User.class);
 		Root<User> userRoot = criteriaQuery.from(User.class);
-		criteriaQuery.select(userRoot);
-
+		userRoot.fetch("userProfiles", JoinType.INNER);
+		
+		criteriaQuery.select(userRoot);		
 		criteriaQuery.where(cb.equal(userRoot.get("username"), username));
 
 		Query query = getEntityManager().createQuery(criteriaQuery);
@@ -51,11 +52,26 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		if (results.size() == 1) {
 			user = (User) getEntityManager().createQuery(criteriaQuery).getSingleResult();
 		}
-		if (user != null) {
-			Hibernate.initialize(user.getUserProfiles());
-		}
+//		if (user != null) {
+//			Hibernate.initialize(user.getUserProfiles());
+//		}
 		return user;
 	}
+	/*
+	public User findByIdAndLoadProfiles(long id) {
+		CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();		
+		CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
+		
+		Root<User> userRoot  = criteriaQuery.from(User.class);
+		userRoot.fetch("userProfiles", JoinType.INNER);
+		
+		criteriaQuery.select(userRoot);
+		criteriaQuery.where(builder.equal(userRoot.get("id"), id));
+		
+		User user = getEntityManager().createQuery(criteriaQuery).getSingleResult();
+						
+		return user;
+	}*/
 
 
 
@@ -71,4 +87,5 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 		getEntityManager().remove(user);
 	}
+
 }

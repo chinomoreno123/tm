@@ -1,5 +1,7 @@
 package pl.poleng.controller;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -9,7 +11,8 @@ import java.util.Set;
 import javax.jms.Message;
 import javax.validation.Valid;
 
-import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
@@ -36,6 +39,7 @@ import pl.poleng.dao.model.User;
 import pl.poleng.dao.model.UserPreferences;
 import pl.poleng.dao.model.UserProfile;
 import pl.poleng.dao.model.UserProfileType;
+import pl.poleng.messaging.MessageReceiver;
 import pl.poleng.security.MyUserPrincipal;
 import pl.poleng.service.UserProfileService;
 import pl.poleng.service.UserService;
@@ -45,6 +49,8 @@ import pl.poleng.validator.PasswordValidator;
 @RequestMapping({ "/admin/user/" })
 @SessionAttributes({ "roles" })
 public class UserController {
+	
+	static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	UserService userService;
@@ -85,12 +91,25 @@ public class UserController {
 		user.setUserProfiles(profiles);
 		userService.sendUserToQueue(user);*/
 		
+		/*User u = userService.findByIdAndLoadProfiles((long)1);
+		System.out.println("User name = " + u.getFirstName());		
 		
-		//userService.receiveFromQueue();
-			
+		System.out.println("User profiles = " + u.getUserProfiles().size());
+		*/
 		
-		List<User> users = this.userService.findAllUsers();
-		model.addAttribute("users", users);
+		/*LOG.info("Start receiving...");	
+		User u = userService.receiveFromQueue();
+		
+		if(u != null)
+			LOG.info("User receiverd from queue: " + u .getFirstName());			
+		*/
+		//List<User> users = this.userService.findAllUsers();
+		//model.addAttribute("users", users);
+		
+		//this.userService.findAllUsers();
+		
+		List<User> users = this.userService.findTest((long)1);
+		
 		model.addAttribute("loggedinuser", preferences.getName());
 		model.addAttribute("errorMessage", "ERROR MESSAGE");
 		return "userslist";
@@ -142,7 +161,7 @@ public class UserController {
 		model.addAttribute("loggedinuser", getPrincipal());
 		if (result.hasErrors()) {
 			return "newuser";
-		}
+		} 
 		this.userService.updateUser(user);
 
 		model.addAttribute("success",
@@ -173,7 +192,16 @@ public class UserController {
 
 	@ModelAttribute("roles")
 	public List<UserProfile> initializeProfiles() {
-		return this.userProfileService.findAll();
+		List<UserProfile> list = this.userProfileService.findAll();
+		Collections.sort(list,new Comparator<UserProfile>(){
+
+			@Override
+			public int compare(UserProfile o1, UserProfile o2) {
+				return ((UserProfile)o2).getType().toString().compareTo(((UserProfile)o1).getType());
+			}}
+		);		
+				
+		return list;
 	}
 
 	private String getPrincipal() {
